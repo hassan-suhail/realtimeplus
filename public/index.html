@@ -1,0 +1,27 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Realtime Notepad</title>
+</head>
+<body>
+  <textarea id="notepad" cols="80" rows="20"></textarea>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    const notepad = document.getElementById('notepad');
+
+    notepad.addEventListener('input', () => {
+      socket.emit('textChange', notepad.value);
+    });
+
+    socket.on('textChange', (text) => {
+      notepad.value = text;
+    });
+  </script>
+</body>
+</html>
