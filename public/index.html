@@ -1,4 +1,3 @@
-<!-- public/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,12 +14,21 @@
 
     const notepad = document.getElementById('notepad');
 
+    // Event listener for input in the notepad
     notepad.addEventListener('input', () => {
-      socket.emit('textChange', notepad.value);
+      socket.emit('send', notepad.value); // Emit 'send' event to send the current text to the server
     });
 
-    socket.on('textChange', (text) => {
-      notepad.value = text;
+    // Listen for 'update' event from the server to receive the current or updated text
+    socket.on('update', (text) => {
+      if (notepad.value !== text) { // Update the textarea only if the text is different
+        notepad.value = text;
+      }
+    });
+
+    // When a new client connects, the server should send the current state of the text
+    socket.on('connect', () => {
+      console.log("Connected to the server.");
     });
   </script>
 </body>
